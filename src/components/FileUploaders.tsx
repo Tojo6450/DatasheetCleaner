@@ -3,20 +3,23 @@
 import React, { useRef } from "react";
 import Papa from "papaparse";
 
-// Define types for props and data structures
-interface Props {
+type EntityType = "client" | "worker" | "task";
+
+type RawRow = Record<string, string>;
+
+type Props = {
   onDataParsed: (data: {
-    clients: any[];
-    workers: any[];
-    tasks: any[];
+    clients: RawRow[];
+    workers: RawRow[];
+    tasks: RawRow[];
   }) => void;
   onMessage: (msg: string) => void;
-}
+};
 
 const FileUploaders: React.FC<Props> = ({ onDataParsed, onMessage }) => {
-  const rawClients = useRef<any[]>([]);
-  const rawWorkers = useRef<any[]>([]);
-  const rawTasks = useRef<any[]>([]);
+  const rawClients = useRef<RawRow[]>([]);
+  const rawWorkers = useRef<RawRow[]>([]);
+  const rawTasks = useRef<RawRow[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -25,18 +28,19 @@ const FileUploaders: React.FC<Props> = ({ onDataParsed, onMessage }) => {
     Array.from(files).forEach((file) => {
       const ext = file.name.split(".").pop()?.toLowerCase();
       const baseName = file.name.toLowerCase();
+
       if (ext !== "csv") {
         onMessage(`❌ ${file.name} is not a CSV file.`);
         return;
       }
 
-      Papa.parse(file, {
+      Papa.parse<RawRow>(file, {
         header: true,
         skipEmptyLines: true,
-        complete: async ({ data }: Papa.ParseResult<any>) => {
+        complete: async ({ data }: Papa.ParseResult<RawRow>) => {
           const sample = data.slice(0, 5);
 
-          let type: "client" | "worker" | "task" | "" = "";
+          let type: EntityType | "" = "";
           if (baseName.includes("client")) type = "client";
           else if (baseName.includes("worker")) type = "worker";
           else if (baseName.includes("task")) type = "task";
@@ -52,10 +56,10 @@ const FileUploaders: React.FC<Props> = ({ onDataParsed, onMessage }) => {
               body: JSON.stringify({ sampleRows: sample, entityType: type }),
             });
 
-            const { mapping } = await res.json();
+            const { mapping }: { mapping: Record<string, string> } = await res.json();
 
-            const mapped = data.map((row: Record<string, string>) => {
-              const newRow: Record<string, string> = {};
+            const mapped = data.map((row) => {
+              const newRow: RawRow = {};
               for (const key in row) {
                 const mappedKey = mapping[key] || key;
                 if (mappedKey !== "IGNORE") newRow[mappedKey] = row[key];

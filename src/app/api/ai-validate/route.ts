@@ -26,7 +26,14 @@ export async function POST(req: Request) {
     const jsonEnd = raw.lastIndexOf("]");
     const jsonText = raw.slice(jsonStart, jsonEnd + 1).trim();
 
-    let suggestions: any[] = [];
+    type Suggestion = {
+      index: number;
+      issues: string[];
+      suggestions?: Record<string, string>;
+    };
+
+    let suggestions: Suggestion[] = [];
+
 
     try {
       suggestions = JSON.parse(jsonText);
@@ -36,11 +43,20 @@ export async function POST(req: Request) {
     }
 
     return Response.json({ suggestions });
-  } catch (error: any) {
+  }  catch (error: unknown) {
+  if (error instanceof Error) {
     console.error("Gemini AI Validation Error:", error.message);
     return Response.json(
       { error: "Failed to validate data with AI", message: error.message },
       { status: 500 }
     );
   }
+
+  console.error("Unknown error during validation:", error);
+  return Response.json(
+    { error: "Unknown error during validation." },
+    { status: 500 }
+  );
+}
+
 }

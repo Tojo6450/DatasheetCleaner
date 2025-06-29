@@ -149,10 +149,10 @@ const RuleBuilder: React.FC<RuleBuilderProps> = ({
         </label>
         <select
           id="phase-window-task-select"
+          aria-label="Select Task for Phase Window"
           className="border p-1 w-full mb-2"
           value={selectedTaskID}
           onChange={(e) => setSelectedTaskID(e.target.value)}
-          aria-label="Select Task for Phase Window"
         >
           <option value="" className="bg-black">Select Task</option>
           {tasks.map((t) => (
@@ -179,7 +179,7 @@ const RuleBuilder: React.FC<RuleBuilderProps> = ({
       {/* Current Rules Output */}
       <div className="mt-6">
         <h4 className="font-semibold">Current Rules:</h4>
-        <pre className="text-sm p-2 rounded max-h-60 overflow-auto ">
+        <pre className="text-sm p-2 rounded max-h-60 overflow-auto bg-gray-100">
           {JSON.stringify(rules, null, 2)}
         </pre>
 

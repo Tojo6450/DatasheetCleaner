@@ -23,11 +23,21 @@ export async function POST(req: NextRequest) {
     const mapping = JSON.parse(cleanText);
 
     return NextResponse.json({ mapping });
-  } catch (error: any) {
+  }  catch (error: unknown) {
+  if (error instanceof Error) {
     console.error("AI map error:", error);
     return NextResponse.json(
       { error: "Failed to map headers", details: error.message },
       { status: 500 }
     );
   }
+
+  // Fallback if error is not an instance of Error
+  console.error("Unknown error:", error);
+  return NextResponse.json(
+    { error: "Failed to map headers", details: "Unknown error occurred." },
+    { status: 500 }
+  );
+}
+
 }

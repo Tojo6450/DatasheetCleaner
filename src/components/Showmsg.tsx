@@ -10,9 +10,12 @@ const ShowMessages: React.FC<ShowMessagesProps> = ({ messages = [] }) => {
   if (!messages.length) return null;
 
   return (
-    <div className="my-6 space-y-3">
+    <div className="my-6 space-y-2" role="status" aria-live="polite">
       {messages.map((msg, idx) => (
-        <p key={idx} className="text-sm text-gray-700">
+        <p
+          key={`${msg}-${idx}`}
+          className="text-sm text-gray-700 border-l-4 border-blue-400 bg-blue-50 pl-2 py-1 rounded"
+        >
           {msg}
         </p>
       ))}

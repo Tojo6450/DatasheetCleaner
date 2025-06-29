@@ -54,7 +54,7 @@ const Validator: React.FC<Props> = ({
       tasks: validatedTasks,
     });
 
-    // onMessage?.("✅ Core Validations completed.");
+    onMessage?.("✅ Core Validations completed.");
 
     const parseSafeJSON = async (res: Response) => {
       try {

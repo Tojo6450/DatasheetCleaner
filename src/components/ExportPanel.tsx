@@ -3,14 +3,14 @@
 import React from "react";
 
 interface ExportPanelProps {
-  clients: any[];
-  workers: any[];
-  tasks: any[];
-  rules: any[];
+  clients: Record<string, unknown>[];
+  workers: Record<string, unknown>[];
+  tasks: Record<string, unknown>[];
+  rules: Record<string, unknown>[];
 }
 
 const ExportPanel: React.FC<ExportPanelProps> = ({ clients, workers, tasks, rules }) => {
-  const downloadJSON = (filename: string, data: unknown) => {
+  const downloadJSON = (filename: string, data: object) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: "application/json",
     });

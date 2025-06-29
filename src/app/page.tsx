@@ -35,10 +35,20 @@ export default function Home() {
   const [rules, setRules] = useState<any[]>([]);
   const [messages, setMessages] = useState<(string | string[])[]>([]);
 
-  const handleDataParsed = ({ clients, workers, tasks }: ParsedData) => {
+  const handleDataParsed = ({
+    clients,
+    workers,
+    tasks,
+  }: { clients: any[]; workers: any[]; tasks: any[] }) => {
     setClients(clients);
     setWorkers(workers);
-    setTasks(tasks);
+    // Ensure each task has a TaskID property (fallback to empty string if missing)
+    setTasks(
+      tasks.map((task) => ({
+        TaskID: task.TaskID ?? "",
+        ...task,
+      }))
+    );
   };
 
   const handleMessage = (msg: string | string[]) => {
