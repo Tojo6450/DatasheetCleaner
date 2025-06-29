@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     try {
       suggestions = JSON.parse(jsonText);
     } catch (e) {
-      console.error("Failed to parse AI JSON:", jsonText);
+      console.error("Failed to parse AI JSON:", e);
       return Response.json({ error: "AI returned malformed JSON." }, { status: 500 });
     }
 

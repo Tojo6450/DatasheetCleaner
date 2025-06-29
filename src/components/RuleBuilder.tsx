@@ -21,8 +21,8 @@ interface RuleBuilderProps {
 
 const RuleBuilder: React.FC<RuleBuilderProps> = ({
   tasks,
-  workers,
-  clients,
+  workers: _workers,
+  clients: _clients,
   onRulesChange,
 }) => {
   const [rules, setRules] = useState<Rule[]>([]);
