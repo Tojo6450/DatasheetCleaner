@@ -179,7 +179,7 @@ const RuleBuilder: React.FC<RuleBuilderProps> = ({
       {/* Current Rules Output */}
       <div className="mt-6">
         <h4 className="font-semibold">Current Rules:</h4>
-        <pre className="text-sm p-2 rounded max-h-60 overflow-auto bg-gray-100">
+        <pre className="text-sm p-2 rounded max-h-60 overflow-auto ">
           {JSON.stringify(rules, null, 2)}
         </pre>
 
